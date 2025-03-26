@@ -1,0 +1,77 @@
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
+  overflow: hidden;
+  background: url('../../assets/img/gettyimages-1502975896-2048x2048.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 28, 13, 0.6);
+  }
+
+  .banner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+
+    .banner-subtitle {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .typewriter-text {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 2rem 0;
+      min-height: 60px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+      &::after {
+        content: "|";
+        margin-left: 5px;
+        animation: blink 1s infinite;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .banner-subtitle {
+        font-size: 1.4rem;
+      }
+      .typewriter-text {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner-subtitle {
+        font-size: 1.2rem;
+      }
+      .typewriter-text {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

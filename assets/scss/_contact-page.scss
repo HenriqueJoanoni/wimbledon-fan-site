@@ -1,0 +1,145 @@
+.hero-banner-contact {
+  position: relative;
+  width: 100%;
+  height: 35vh;
+  min-height: 500px;
+  overflow: hidden;
+  background: url('../../assets/img/gettyimages-1407313293-2048x2048.webp');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .banner-overlay-contact {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 28, 13, 0.6);
+  }
+
+  .banner-content-contact {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+
+    .banner-subtitle-contact {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .banner-subtitle-contact {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner-subtitle-contact {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: $tertiary-color;
+  border-radius: $border-radius;
+  @include box-shadow($rgba1, $rgba2);
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $primary-color;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid $secondary-color;
+      border-radius: $border-radius;
+      background: white;
+      @include transition-effect(border-color);
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+  }
+
+  .submit-btn {
+    background: $primary-color;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    @include transition-effect(background-color);
+    @include box-shadow($rgba3, $rgba2);
+
+    &:hover {
+      background: darken($primary-color, 10%);
+    }
+  }
+
+  .form-notification {
+    margin-top: 1rem;
+    padding: 1rem;
+    display: none;
+    border-radius: $border-radius;
+
+    &.success {
+      display: block;
+      background: lighten($primary-color, 50%);
+      color: darken($primary-color, 20%);
+    }
+
+    &.error {
+      display: block;
+      background: lighten($quaternary-color, 30%);
+      color: darken($quaternary-color, 30%);
+    }
+  }
+
+  @media (max-width: $tablet) {
+    padding: 1rem;
+    margin: 1rem;
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: $mobile) {
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+}
