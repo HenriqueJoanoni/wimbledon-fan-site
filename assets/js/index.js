@@ -116,7 +116,7 @@ document.querySelectorAll('.translation-button').forEach(button => {
         const elements = document.querySelectorAll('h1, p, span, .jh_translatedString');
 
         for (const element of elements) {
-            const response = await fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyAi1Qow5DshGlDIDqe3Q0WESlHf2vkixDk', {
+            const response = await fetch('https://translation.googleapis.com/language/translate/v2?key={API_KEY}', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
