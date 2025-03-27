@@ -455,4 +455,13 @@ a:hover {
   }
 }
 
+/** TRANSLATION BUTTONS */
+.translation-button {
+  cursor: pointer;
+}
+.translation-button img {
+  width: 32px;
+  height: 32px;
+}
+
 /*# sourceMappingURL=main.css.map */

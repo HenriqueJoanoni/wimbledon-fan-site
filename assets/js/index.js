@@ -108,3 +108,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     typewriter.start();
 });
+
+/** TRANSLATIONS */
+document.querySelectorAll('.translation-button').forEach(button => {
+    button.addEventListener('click', async function() {
+        const targetLang = this.dataset.lang;
+        const elements = document.querySelectorAll('h1, p, span, .jh_translatedString');
+
+        for (const element of elements) {
+            const response = await fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyAi1Qow5DshGlDIDqe3Q0WESlHf2vkixDk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    q: element.innerText,
+                    target: targetLang
+                }),
+            });
+            const translatedData = await response.json();
+            element.innerText = translatedData.data.translations[0].translatedText;
+        }
+    });
+});

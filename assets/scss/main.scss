@@ -309,3 +309,13 @@ a {
     height: 50vh;
   }
 }
+
+/** TRANSLATION BUTTONS */
+.translation-button {
+  cursor: pointer;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}
