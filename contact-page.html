@@ -1,70 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wimbledon API</title>
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="shortcut icon" href="assets/img/tennis.png" type="image/x-icon">
-</head>
+<main-header></main-header>
 <body>
-<nav class="main-navbar">
-  <div class="nav-container">
-    <div class="logo-title-container">
-      <a href="index.html">
-        <img class="logo" src="assets/img/tennis.png" alt="Wimbledon API">
-        <div class="nav-title">Wimbledon Fan Site</div>
-      </a>
+<nav-bar></nav-bar>
+<section class="jh_heroBannerContact">
+    <div class="jh_bannerOverlayContact"></div>
+    <div class="jh_bannerContentContact">
+        <h2 class="jh_bannerSubtitleContact jh_translatedString">Contact Us!</h2>
     </div>
-    <div class="nav-links">
-      <a href="index.html" class="jh_translatedString">Home</a>
-      <a href="wimbledon-locations.html" class="jh_translatedString">What to do?</a>
-      <a href="contact-page.html" class="jh_translatedString">Contact</a>
-      <a target="_blank" href="https://www.wimbledon.com/en_GB/atoz/ticket_prices.html"
-         class="button button--cta jh_translatedString">Tickets</a>
-      <a class="translation-button" data-lang="pt-BR">
-        <img src="assets/img/brazil-.png" alt="Translate pt-br">
-      </a>
-      <a class="translation-button" data-lang="es">
-        <img src="assets/img/spain.png" alt="Translate es">
-      </a>
-      <a class="translation-button" data-lang="en-GB">
-        <img src="assets/img/united-kingdom.png" alt="Translate en-gb">
-      </a>
-    </div>
-    <button class="hamburger">☰</button>
-  </div>
-</nav>
-<section class="hero-banner-contact">
-  <div class="banner-overlay-contact"></div>
-  <div class="banner-content-contact">
-    <h2 class="banner-subtitle-contact jh_translatedString">Contact Us!</h2>
-  </div>
 </section>
-<div class="main-container">
-  <div class="text-center">
-    <form action="#" class="contact-form">
-      <div class="form-group">
-        <label for="name" class="jh_translatedString">Name</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-      <div class="form-group">
-        <label for="email" class="jh_translatedString">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="subject" class="jh_translatedString">Subject</label>
-        <input type="text" id="subject" name="subject" required>
-      </div>
-      <div class="form-group">
-        <label for="message" class="jh_translatedString">Message</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-      </div>
-      <button type="submit" class="submit-btn jh_translatedString">Submit Contact</button>
-      <div class="form-notification"></div>
-    </form>
-  </div>
+<div class="jh_mainContainer">
+    <div class="jh_textCenter">
+        <form action="#" class="jh_contactForm">
+            <div class="jh_formGroup">
+                <label for="jh_name" class="jh_translatedString">Name</label>
+                <input type="text" id="jh_name" name="name" required>
+            </div>
+            <div class="jh_formGroup">
+                <label for="jh_email" class="jh_translatedString">Email</label>
+                <input type="email" id="jh_email" name="email" required>
+            </div>
+            <div class="jh_formGroup">
+                <label for="jh_subject" class="jh_translatedString">Subject</label>
+                <input type="text" id="jh_subject" name="subject" required>
+            </div>
+            <div class="jh_formGroup">
+                <label for="jh_message" class="jh_translatedString">Message</label>
+                <textarea id="jh_message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="jh_submitBtn jh_translatedString">Submit Contact</button>
+            <div class="jh_formNotification"></div>
+        </form>
+    </div>
 </div>
 <script src="assets/js/index.js"></script>
 </body>
+<footer-page></footer-page>
 </html>

@@ -17,15 +17,19 @@ $mobile: 480px;
 $tablet: 768px;
 $desktop: 1024px;
 
-@mixin box-shadow($color1, $color2) {
+@mixin jh_boxShadow($color1, $color2) {
   box-shadow: 0 8px 20px $color1, 0 3px 6px $color2;
 }
 
-@mixin transition-effect($property, $duration: 0.5s) {
+@mixin jh_textShadow($color1) {
+  text-shadow: 1px 1px 2px $color1;
+}
+
+@mixin jh_transitionEffect($property, $duration: 0.5s) {
   transition: $property $duration ease-in-out;
 }
 
-@keyframes fadeOut {
+@keyframes jh_fadeOut {
   from {
     opacity: 1;
   }
@@ -45,7 +49,7 @@ $desktop: 1024px;
   font-family: 'Poppins', sans-serif;
 }
 
-.main-container {
+.jh_mainContainer {
   max-width: 100%;
   margin: 0 auto;
   padding: 1rem;
@@ -82,41 +86,49 @@ p {
 a {
   color: $primary-color;
   text-decoration: none;
-  @include transition-effect(color);
+  @include jh_transitionEffect(color);
 
   &:hover {
     color: darken($primary-color, 10%);
   }
 }
 
-.button {
+.jh_button {
   display: inline-block;
   padding: 0.8rem 1.5rem;
-  background-color: $primary-color;
-  color: $secondary-color;
   border-radius: $border-radius;
-  @include transition-effect(all);
-  @include box-shadow($rgba1, $rgba2);
+  @include jh_transitionEffect(all);
+  @include jh_boxShadow($rgba1, $rgba2);
 
   &:hover {
     background-color: darken($primary-color, 5%);
     transform: translateY(-2px);
   }
 
-  &--secondary {
+  &primary {
+    background-color: $primary-color;
+    color: $secondary-color;
+  }
+
+  &Secondary {
     background-color: $secondary-color;
+    color: $primary-color;
+  }
+
+  &Cta {
+    background-color: $quaternary-color;
     color: $primary-color;
   }
 }
 
 /** RESPONSIVE UTILITIES */
-.mobile-only {
+.jh_mobileOnly {
   @media (min-width: $tablet) {
     display: none !important;
   }
 }
 
-.desktop-only {
+.jh_desktopOnly {
   display: none !important;
 
   @media (min-width: $desktop) {
@@ -124,22 +136,22 @@ a {
   }
 }
 
-.text-center {
+.jh_textCenter {
   text-align: center;
 }
 
 /** GRID SYSTEM */
-.row {
+.jh_row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 
-  &.no-gap {
+  &.jh_noGap {
     gap: 0;
   }
 }
 
-.col {
+.jh_col {
   flex: 1 0 100%;
 
   @media (min-width: $tablet) {
@@ -151,7 +163,7 @@ a {
   }
 }
 
-@mixin respond-to($breakpoint) {
+@mixin jh_respondTo($breakpoint) {
   @if $breakpoint == tablet {
     @media (min-width: $tablet) {
       @content;
@@ -163,18 +175,16 @@ a {
   }
 }
 
-/** WEBSITE CONTENT */
-
 /** NAVBAR */
-.main-navbar {
+.jh_mainNavbar {
   background-color: $primary-color;
   padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 1000;
-  @include box-shadow(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+  @include jh_boxShadow(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
 
-  .nav-container {
+  .jh_navContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -183,7 +193,7 @@ a {
     padding: 0 1.5rem;
   }
 
-  .logo-title-container {
+  .jh_logoTitleContainer {
     a {
       display: flex;
       align-items: center;
@@ -191,19 +201,19 @@ a {
       text-decoration: none;
     }
 
-    @include transition-effect(transform);
+    @include jh_transitionEffect(transform);
 
     &:hover {
       transform: scale(1.05);
     }
   }
 
-  .logo {
+  .jh_logo {
     height: 40px;
     margin: 0;
   }
 
-  .nav-title {
+  .jh_navTitle {
     color: $tertiary-color;
     font-size: 1.5rem;
     font-weight: 700;
@@ -211,7 +221,7 @@ a {
     padding: 0;
   }
 
-  .nav-links {
+  .jh_navLinks {
     display: flex;
     gap: 2rem;
     align-items: center;
@@ -221,7 +231,7 @@ a {
       text-decoration: none;
       font-weight: 500;
       position: relative;
-      @include transition-effect(all);
+      @include jh_transitionEffect(all);
 
       &:hover {
         color: $tertiary-color;
@@ -239,35 +249,61 @@ a {
       }
     }
 
-    .button--cta {
-      background-color: $quaternary-color;
-      color: darken($quaternary-color, 50%);
+    .jh_buttonCta {
       margin-left: 1rem;
       font-weight: 600;
+      color: $primary-color;
 
       &:hover {
         background-color: darken($quaternary-color, 10%);
+        color: $secondary-color;
         transform: translateY(-2px);
+        @include jh_textShadow($rgba1);
       }
     }
   }
 
-  .hamburger {
-    display: none;
+  .jh_hamburger {
     background: none;
     border: none;
-    color: $secondary-color;
-    font-size: 1.5rem;
     cursor: pointer;
-    @include transition-effect(all);
+    padding: 8px;
+    @include jh_transitionEffect(transform);
 
     &:hover {
       transform: scale(1.1);
     }
+
+    svg {
+      width: 32px;
+      height: 32px;
+      color: $secondary-color;
+    }
+
+    &.jh_active {
+      .jh_hamburgerLine {
+        opacity: 0;
+
+        &:first-child {
+          transform: translateY(8px) rotate(45deg);
+          opacity: 1;
+        }
+
+        &:last-child {
+          transform: translateY(-8px) rotate(-45deg);
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .jh_hamburgerLine {
+    @include jh_transitionEffect(all);
+    transform-origin: center;
   }
 
   @media (max-width: $tablet) {
-    .nav-links {
+    .jh_navLinks {
       display: none;
       position: absolute;
       top: 100%;
@@ -278,18 +314,18 @@ a {
       padding: 1rem;
       gap: 1rem;
       text-align: center;
-      @include box-shadow(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+      @include jh_boxShadow(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
 
-      &.active {
+      &.jh_active {
         display: flex;
       }
 
-      .button--cta {
+      .jh_buttonCta {
         margin-left: 0;
       }
     }
 
-    .hamburger {
+    .jh_hamburger {
       display: block;
     }
   }
@@ -311,11 +347,27 @@ a {
 }
 
 /** TRANSLATION BUTTONS */
-.translation-button {
+.jh_translationButton {
   cursor: pointer;
 
   img {
     width: 32px;
     height: 32px;
+  }
+}
+
+/** FOOTER */
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $secondary-color;
+  color: $tertiary-color;
+  width: 100%;
+  height: 5rem;
+
+  .jh_footerCopyright {
+    color: $rgba3;
+    @include jh_textShadow($rgba1);
   }
 }

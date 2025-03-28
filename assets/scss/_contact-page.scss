@@ -1,4 +1,4 @@
-.hero-banner-contact {
+.jh_heroBannerContact {
   position: relative;
   width: 100%;
   height: 35vh;
@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
 
-  .banner-overlay-contact {
+  .jh_bannerOverlayContact {
     position: absolute;
     top: 0;
     left: 0;
@@ -20,51 +20,42 @@
     background: rgba(0, 28, 13, 0.6);
   }
 
-  .banner-content-contact {
+  .jh_bannerContentContact {
     position: relative;
     z-index: 2;
     text-align: center;
     color: white;
     padding: 0 20px;
 
-    .banner-subtitle-contact {
+    .jh_bannerSubtitleContact {
       font-size: 1.8rem;
       margin-bottom: 1rem;
       color: #fff;
     }
 
     @media (max-width: 768px) {
-      .banner-subtitle-contact {
+      .jh_bannerSubtitleContact {
         font-size: 1.4rem;
       }
     }
 
     @media (max-width: 480px) {
-      .banner-subtitle-contact {
+      .jh_bannerSubtitleContact {
         font-size: 1.2rem;
       }
     }
   }
 }
 
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.contact-form {
+.jh_contactForm {
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
   background: $tertiary-color;
   border-radius: $border-radius;
-  @include box-shadow($rgba1, $rgba2);
+  @include jh_boxShadow($rgba1, $rgba2);
 
-  .form-group {
+  .jh_formGroup {
     margin-bottom: 1.5rem;
     text-align: left;
 
@@ -82,7 +73,7 @@
       border: 2px solid $secondary-color;
       border-radius: $border-radius;
       background: white;
-      @include transition-effect(border-color);
+      @include jh_transitionEffect(border-color);
 
       &:focus {
         outline: none;
@@ -91,7 +82,7 @@
     }
   }
 
-  .submit-btn {
+  .jh_submitBtn {
     background: $primary-color;
     color: white;
     padding: 1rem 2rem;
@@ -100,27 +91,27 @@
     cursor: pointer;
     font-weight: bold;
     text-transform: uppercase;
-    @include transition-effect(background-color);
-    @include box-shadow($rgba3, $rgba2);
+    @include jh_transitionEffect(background-color);
+    @include jh_boxShadow($rgba3, $rgba2);
 
     &:hover {
       background: darken($primary-color, 10%);
     }
   }
 
-  .form-notification {
+  .jh_formNotification {
     margin-top: 1rem;
     padding: 1rem;
     display: none;
     border-radius: $border-radius;
 
-    &.success {
+    &.jh_success {
       display: block;
       background: lighten($primary-color, 50%);
       color: darken($primary-color, 20%);
     }
 
-    &.error {
+    &.jh_error {
       display: block;
       background: lighten($quaternary-color, 30%);
       color: darken($quaternary-color, 30%);
@@ -131,13 +122,13 @@
     padding: 1rem;
     margin: 1rem;
 
-    .form-group {
+    .jh_formGroup {
       margin-bottom: 1rem;
     }
   }
 
   @media (max-width: $mobile) {
-    .submit-btn {
+    .jh_submitBtn {
       width: 100%;
       padding: 1rem;
     }
