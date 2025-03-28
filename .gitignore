@@ -130,4 +130,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+.api-keys
+
 # End of https://www.toptal.com/developers/gitignore/api/webstorm+all,windows,linux

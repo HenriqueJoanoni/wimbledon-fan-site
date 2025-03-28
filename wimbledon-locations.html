@@ -1,52 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wimbledon API</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="shortcut icon" href="assets/img/tennis.png" type="image/x-icon">
-</head>
+<main-header></main-header>
 <body>
-<nav class="main-navbar">
-    <div class="nav-container">
-        <div class="logo-title-container">
-            <a href="index.html">
-                <img class="logo" src="assets/img/tennis.png" alt="Wimbledon API">
-                <div class="nav-title">Wimbledon Fan Site</div>
-            </a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html" class="jh_translatedString">Home</a>
-            <a href="wimbledon-locations.html" class="jh_translatedString">What to do?</a>
-            <a href="contact-page.html" class="jh_translatedString">Contact</a>
-            <a target="_blank" href="https://www.wimbledon.com/en_GB/atoz/ticket_prices.html"
-               class="button button--cta jh_translatedString">Tickets</a>
-            <a class="translation-button" data-lang="pt-BR">
-                <img src="assets/img/brazil-.png" alt="Translate pt-br">
-            </a>
-            <a class="translation-button" data-lang="es">
-                <img src="assets/img/spain.png" alt="Translate es">
-            </a>
-            <a class="translation-button" data-lang="en-GB">
-                <img src="assets/img/united-kingdom.png" alt="Translate en-gb">
-            </a>
-        </div>
-        <button class="hamburger">☰</button>
-    </div>
-</nav>
-<div class="main-container">
-    <div class="text-center">
+<nav-bar></nav-bar>
+<div class="jh_mainContainer">
+    <div class="jh_textCenter">
         <h1>All Court Locations</h1>
         <div id="jh_locations"></div>
-        <a class="button jh_translatedString" href="index.html">Back</a>
+        <a class="jh_button jh_buttonprimary jh_translatedString" href="index.html">Back</a>
     </div>
 </div>
-<!-- MAPS API -->
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={API_KEY}&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key={}&callback=initMap">
 </script>
-<!-- MAIN JS FILE -->
 <script src="assets/js/index.js"></script>
 </body>
+<footer-page></footer-page>
 </html>

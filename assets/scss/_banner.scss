@@ -1,4 +1,4 @@
-.hero-banner {
+.jh_heroBanner {
   position: relative;
   width: 100%;
   height: 70vh;
@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
 
-  .banner-overlay {
+  .jh_bannerOverlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -20,20 +20,20 @@
     background: rgba(0, 28, 13, 0.6);
   }
 
-  .banner-content {
+  .jh_bannerContent {
     position: relative;
     z-index: 2;
     text-align: center;
     color: white;
     padding: 0 20px;
 
-    .banner-subtitle {
+    .jh_bannerSubtitle {
       font-size: 1.8rem;
       margin-bottom: 1rem;
       color: #fff;
     }
 
-    .typewriter-text {
+    .jh_typewriterText {
       font-size: 2.5rem;
       font-weight: 700;
       margin: 2rem 0;
@@ -43,31 +43,31 @@
       &::after {
         content: "|";
         margin-left: 5px;
-        animation: blink 1s infinite;
+        animation: jh_blink 1s infinite;
       }
     }
 
     @media (max-width: 768px) {
-      .banner-subtitle {
+      .jh_bannerSubtitle {
         font-size: 1.4rem;
       }
-      .typewriter-text {
+      .jh_typewriterText {
         font-size: 2rem;
       }
     }
 
     @media (max-width: 480px) {
-      .banner-subtitle {
+      .jh_bannerSubtitle {
         font-size: 1.2rem;
       }
-      .typewriter-text {
+      .jh_typewriterText {
         font-size: 1.5rem;
       }
     }
   }
 }
 
-@keyframes blink {
+@keyframes jh_blink {
   0%, 100% {
     opacity: 1;
   }
