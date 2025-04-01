@@ -131,5 +131,6 @@ $RECYCLE.BIN/
 *.lnk
 
 .api-keys
+assets/config/*
 
 # End of https://www.toptal.com/developers/gitignore/api/webstorm+all,windows,linux
