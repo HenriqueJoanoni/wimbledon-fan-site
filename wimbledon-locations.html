@@ -7,15 +7,39 @@
         <div id="jh_locations"></div>
     </div>
     <section class="jh_displayActivities">
-        <activity-card></activity-card>
+        <activity-card
+                data-modal-content="places-to-go"
+                title="All places to go around wimbledon"
+                description="Check all places to go around wimbledon"
+                img-src="assets/img/pexels-mikebirdy-9787553.jpg">
+        </activity-card>
+
+        <activity-card
+                data-modal-content="transportation-info"
+                title="Check the transportation of your court"
+                description="All transportation available to the event"
+                img-src="assets/img/pexels-nubikini-385997.jpg">
+        </activity-card>
+
+        <activity-card
+                data-modal-content="around-events"
+                title="Other Events Happening"
+                description="Check Other Events Happening"
+                img-src="assets/img/pexels-joshsorenson-976866.jpg">
+        </activity-card>
     </section>
     <a class="jh_button jh_buttonprimary jh_translatedString" href="index.html">Back</a>
+
+    <modal-component></modal-component>
+
 </div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={}&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=${API_KEYS.maps}&callback=initMap">
 </script>
+<script src="assets/config/environment.js"></script>
 <script src="assets/js/index.js"></script>
 <script src="assets/js/registered-components.js"></script>
+<script src="assets/js/modal.js"></script>
 </body>
 <footer-page></footer-page>
 </html>

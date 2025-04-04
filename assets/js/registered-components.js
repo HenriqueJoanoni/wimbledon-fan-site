@@ -52,14 +52,32 @@ class NavBarComponent extends HTMLElement {
 }
 
 class CardComponent extends HTMLElement {
+    static get observedAttributes() {
+        return ['title', 'description', 'img-src'];
+    }
+
     connectedCallback() {
-        this.innerHTML = `<div class="card">
-                    <img src="assets/img/gettyimages-1502975896-2048x2048.jpg" alt="Avatar" style="width:100%">
-                    <div class="container">
-                        <h4><b>Events and activities</b></h4>
-                        <p>Check the events and activities happening around Wimbledon</p>
-                    </div>
-                </div>`
+        this.render();
+    }
+
+    attributeChangedCallback() {
+        this.render();
+    }
+
+    render() {
+        const title = this.getAttribute('title') || 'Events and activities';
+        const description = this.getAttribute('description') || 'Check activities around Wimbledon';
+        const imgSrc = this.getAttribute('img-src') || 'assets/img/gettyimages-1502975896-2048x2048.jpg';
+
+        this.innerHTML = `
+            <div class="jh_card">
+                <img src="${imgSrc}" alt="${title}" style="width:100%">
+                <div class="jh_cardContainer">
+                    <h4><b>${title}</b></h4>
+                    <p>${description}</p>
+                </div>
+            </div>
+        `;
     }
 }
 
@@ -71,7 +89,30 @@ class FooterComponent extends HTMLElement {
     }
 }
 
+class ModalComponent extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+            <div class="overlay hidden"></div>
+            <section class="modal hidden">
+                <div class="flex">
+                    <img src="https://avatars.githubusercontent.com/u/62628408?s=96&v=4" 
+                         width="50" 
+                         height="50" 
+                         alt="user">
+                    <button class="btn-close" aria-label="Close modal">x</button>
+                </div>
+                <div class="modal-content">
+                    <h3>Stay in touch</h3>
+                    <p>This is a dummy newsletter form...</p>
+                    <input type="email" id="email" placeholder="brendaneich@js.com" />
+                    <button class="btn">Do Something</button>
+                </div>
+            </section>`;
+    }
+}
+
 customElements.define('main-header', HeaderComponent);
 customElements.define('nav-bar', NavBarComponent);
 customElements.define('activity-card', CardComponent);
 customElements.define('footer-page', FooterComponent);
+customElements.define('modal-component', ModalComponent);

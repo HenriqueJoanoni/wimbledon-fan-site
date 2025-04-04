@@ -21,7 +21,11 @@ window.gm_authFailure = () => {
         '<p>Map unavailable - Please check your internet connection</p>';
 };
 
-window.initMap = initMap;
+const mapsScript = document.createElement('script');
+mapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${window.API_KEYS.maps}&callback=initMap`;
+mapsScript.async = true;
+mapsScript.defer = true;
+document.head.appendChild(mapsScript);
 
 /** HAMBURGER MENU */
 document.addEventListener('DOMContentLoaded', () => {
@@ -110,7 +114,7 @@ document.querySelectorAll('.jh_translationButton').forEach(button => {
         const elements = document.querySelectorAll('h1, p, span, .jh_translatedString');
 
         for (const element of elements) {
-            const response = await fetch('https://translation.googleapis.com/language/translate/v2?key={}', {
+            const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
