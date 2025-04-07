@@ -95,18 +95,9 @@ class ModalComponent extends HTMLElement {
             <div class="overlay hidden"></div>
             <section class="modal hidden">
                 <div class="flex">
-                    <img src="https://avatars.githubusercontent.com/u/62628408?s=96&v=4" 
-                         width="50" 
-                         height="50" 
-                         alt="user">
                     <button class="btn-close" aria-label="Close modal">x</button>
                 </div>
-                <div class="modal-content">
-                    <h3>Stay in touch</h3>
-                    <p>This is a dummy newsletter form...</p>
-                    <input type="email" id="email" placeholder="brendaneich@js.com" />
-                    <button class="btn">Do Something</button>
-                </div>
+                <div class="modal-content"></div>
             </section>`;
     }
 }

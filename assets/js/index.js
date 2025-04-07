@@ -127,3 +127,79 @@ document.querySelectorAll('.jh_translationButton').forEach(button => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modalContent = document.querySelector('.modal-content');
+    const wimbledonLocation = {lat: 51.4340, lng: -0.2143};
+    let directionsService, directionsRenderer, modalMap;
+
+    document.addEventListener('modalOpened', async (e) => {
+        const modalType = e.detail?.modalType;
+
+        if (modalType === 'transportation-info') {
+            modalContent.innerHTML = `
+                <div class="route-planner">
+                    <h3>Plan Your Route to Wimbledon</h3>
+                    <form id="routeForm">
+                        <input type="text" 
+                               id="startAddress" 
+                               placeholder="Enter your starting address"
+                               required>
+                        <button type="submit" class="jh_button jh_buttonPrimary">Get Directions</button>
+                    </form>
+                    <div id="modalMap" style="height: 300px; width: 100%; margin-top: 20px;"></div>
+                    <div id="directionsPanel"></div>
+                </div>
+            `;
+
+            modalMap = new google.maps.Map(document.getElementById('modalMap'), {
+                zoom: 12,
+                center: wimbledonLocation
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                map: modalMap,
+                panel: document.getElementById('directionsPanel')
+            });
+
+            document.getElementById('routeForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const startAddress = document.getElementById('startAddress').value;
+
+                ['DRIVING', 'WALKING', 'TRANSIT'].forEach(mode => {
+                    calculateAndDisplayRoute(startAddress, mode);
+                });
+            });
+        }
+        /** OTHER MODAL TYPES HERE */
+    });
+
+    async function calculateAndDisplayRoute(startAddress, travelMode) {
+        try {
+            const response = await directionsService.route({
+                origin: startAddress,
+                destination: wimbledonLocation,
+                travelMode: travelMode,
+                provideRouteAlternatives: true
+            });
+
+            directionsRenderer.setDirections(response);
+
+            const routeInfo = document.createElement('div');
+            routeInfo.className = 'route-option';
+            routeInfo.innerHTML = `
+                <h4>By ${travelMode.toLowerCase()}</h4>
+                <p>Distance: ${response.routes[0].legs[0].distance.text}</p>
+                <p>Duration: ${response.routes[0].legs[0].duration.text}</p>
+            `;
+            document.getElementById('directionsPanel').appendChild(routeInfo);
+
+        } catch (error) {
+            console.error('Directions request failed:', error);
+            modalContent.innerHTML += `
+                <div class="error">Could not find route: ${error.message}</div>
+            `;
+        }
+    }
+});

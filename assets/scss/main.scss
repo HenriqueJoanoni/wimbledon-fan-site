@@ -95,19 +95,26 @@ a {
   }
 }
 
-.jh_button {
+.jh_button, button {
   display: inline-block;
   padding: 0.8rem 1.5rem;
   border-radius: $border-radius;
   @include jh_transitionEffect(all);
   @include jh_boxShadow($rgba1, $rgba2);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+  text-align: center;
+  width: auto;
 
   &:hover {
     background-color: darken($primary-color, 5%);
     transform: translateY(-2px);
   }
 
-  &primary {
+  &Primary {
     background-color: $primary-color;
     color: $secondary-color;
   }
@@ -120,6 +127,11 @@ a {
   &Cta {
     background-color: $quaternary-color;
     color: $primary-color;
+  }
+
+  @media (max-width: $tablet) {
+    padding: 1rem;
+    width: 100%;
   }
 }
 
