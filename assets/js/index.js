@@ -1,68 +1,3 @@
-/** COMPONENTS */
-class HeaderComponent extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Wimbledon API</title>
-            <link rel="stylesheet" href="assets/css/main.css">
-            <link rel="shortcut icon" href="assets/img/tennis.png" type="image/x-icon">
-        </head>`;
-    }
-}
-
-class NavBarComponent extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `
-        <nav class="jh_mainNavbar">
-            <div class="jh_navContainer">
-                <div class="jh_logoTitleContainer">
-                    <a href="index.html">
-                        <img class="jh_logo" src="assets/img/tennis.png" alt="Wimbledon API">
-                        <div class="jh_navTitle">Wimbledon Fan Site</div>
-                    </a>
-                </div>
-                <div class="jh_navLinks">
-                    <a href="index.html" class="jh_translatedString">Home</a>
-                    <a href="wimbledon-locations.html" class="jh_translatedString">What to do?</a>
-                    <a href="contact-page.html" class="jh_translatedString">Contact</a>
-                    <a target="_blank" href="https://www.wimbledon.com/en_GB/atoz/ticket_prices.html"
-                       class="jh_button jh_buttonCta jh_translatedString">Tickets</a>
-                    <a class="jh_translationButton" data-lang="pt-BR">
-                        <img src="assets/img/brazil-.png" alt="Translate pt-br">
-                    </a>
-                    <a class="jh_translationButton" data-lang="es">
-                        <img src="assets/img/spain.png" alt="Translate es">
-                    </a>
-                    <a class="jh_translationButton" data-lang="en-GB">
-                        <img src="assets/img/united-kingdom.png" alt="Translate en-gb">
-                    </a>
-                </div>
-                <button class="jh_hamburger">
-                  <svg viewBox="0 0 24 24" width="32" height="32">
-                    <path class="jh_hamburgerLine" fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-                  </svg>
-                </button>
-            </div>
-        </nav>`;
-    }
-}
-
-class FooterComponent extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `<footer>
-                            <span class="jh_footerCopyright">Jose Henrique Pinto Joanoni @ 2025</span>
-                        </footer>`;
-    }
-}
-
-customElements.define('main-header', HeaderComponent);
-customElements.define('nav-bar', NavBarComponent);
-customElements.define('footer-page', FooterComponent);
-
 /** LOCATION API CALL */
 function initMap() {
     const wimbledonLocations = {lat: 51.4340, lng: -0.2143};
@@ -86,7 +21,11 @@ window.gm_authFailure = () => {
         '<p>Map unavailable - Please check your internet connection</p>';
 };
 
-window.initMap = initMap;
+const mapsScript = document.createElement('script');
+mapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${window.API_KEYS.maps}&callback=initMap`;
+mapsScript.async = true;
+mapsScript.defer = true;
+document.head.appendChild(mapsScript);
 
 /** HAMBURGER MENU */
 document.addEventListener('DOMContentLoaded', () => {
@@ -175,7 +114,7 @@ document.querySelectorAll('.jh_translationButton').forEach(button => {
         const elements = document.querySelectorAll('h1, p, span, .jh_translatedString');
 
         for (const element of elements) {
-            const response = await fetch('https://translation.googleapis.com/language/translate/v2?key={}', {
+            const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -187,4 +126,80 @@ document.querySelectorAll('.jh_translationButton').forEach(button => {
             element.innerText = translatedData.data.translations[0].translatedText;
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modalContent = document.querySelector('.modal-content');
+    const wimbledonLocation = {lat: 51.4340, lng: -0.2143};
+    let directionsService, directionsRenderer, modalMap;
+
+    document.addEventListener('modalOpened', async (e) => {
+        const modalType = e.detail?.modalType;
+
+        if (modalType === 'transportation-info') {
+            modalContent.innerHTML = `
+                <div class="route-planner">
+                    <h3>Plan Your Route to Wimbledon</h3>
+                    <form id="routeForm">
+                        <input type="text" 
+                               id="startAddress" 
+                               placeholder="Enter your starting address"
+                               required>
+                        <button type="submit" class="jh_button jh_buttonPrimary">Get Directions</button>
+                    </form>
+                    <div id="modalMap" style="height: 300px; width: 100%; margin-top: 20px;"></div>
+                    <div id="directionsPanel"></div>
+                </div>
+            `;
+
+            modalMap = new google.maps.Map(document.getElementById('modalMap'), {
+                zoom: 12,
+                center: wimbledonLocation
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                map: modalMap,
+                panel: document.getElementById('directionsPanel')
+            });
+
+            document.getElementById('routeForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const startAddress = document.getElementById('startAddress').value;
+
+                ['DRIVING', 'WALKING', 'TRANSIT'].forEach(mode => {
+                    calculateAndDisplayRoute(startAddress, mode);
+                });
+            });
+        }
+        /** OTHER MODAL TYPES HERE */
+    });
+
+    async function calculateAndDisplayRoute(startAddress, travelMode) {
+        try {
+            const response = await directionsService.route({
+                origin: startAddress,
+                destination: wimbledonLocation,
+                travelMode: travelMode,
+                provideRouteAlternatives: true
+            });
+
+            directionsRenderer.setDirections(response);
+
+            const routeInfo = document.createElement('div');
+            routeInfo.className = 'route-option';
+            routeInfo.innerHTML = `
+                <h4>By ${travelMode.toLowerCase()}</h4>
+                <p>Distance: ${response.routes[0].legs[0].distance.text}</p>
+                <p>Duration: ${response.routes[0].legs[0].duration.text}</p>
+            `;
+            document.getElementById('directionsPanel').appendChild(routeInfo);
+
+        } catch (error) {
+            console.error('Directions request failed:', error);
+            modalContent.innerHTML += `
+                <div class="error">Could not find route: ${error.message}</div>
+            `;
+        }
+    }
 });
