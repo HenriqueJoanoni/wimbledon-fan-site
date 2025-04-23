@@ -128,6 +128,7 @@ document.querySelectorAll('.jh_translationButton').forEach(button => {
     });
 });
 
+/** AMUSEMENT MODALS */
 document.addEventListener('DOMContentLoaded', () => {
     const modalContent = document.querySelector('.modal-content');
     const wimbledonLocation = {lat: 51.4340, lng: -0.2143};
@@ -172,7 +173,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         }
-        /** OTHER MODAL TYPES HERE */
+
+        document.addEventListener('modalOpened', async (e) => {
+            const modalType = e.detail?.modalType;
+
+            if (modalType === 'places-to-go') {
+                modalContent.innerHTML = `
+                <div class="places-container">
+                    <h3>Interesting Places Around Wimbledon</h3>
+                    <div id="placesMap" style="height: 400px; width: 100%;"></div>
+                    <div id="placesList" style="margin-top: 20px;"></div>
+                </div>
+            `;
+
+                const placesMap = new google.maps.Map(document.getElementById('placesMap'), {
+                    center: wimbledonLocation,
+                    zoom: 14
+                });
+
+                const placesService = new google.maps.places.PlacesService(placesMap);
+                const placesList = document.getElementById('placesList');
+
+                const request = {
+                    location: wimbledonLocation,
+                    radius: 2000, // 2km radius
+                    types: ['restaurant', 'park', 'shopping_mall', 'cafe', 'museum']
+                };
+
+                placesService.nearbySearch(request, (results, status, pagination) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        results.forEach(place => {
+                            // Add marker
+                            const marker = new google.maps.Marker({
+                                position: place.geometry.location,
+                                map: placesMap,
+                                title: place.name
+                            });
+
+                            // Add info window
+                            const infoWindow = new google.maps.InfoWindow({
+                                content: `
+                                <h5>${place.name}</h5>
+                                <p>${place.vicinity}</p>
+                                ${place.rating ? `<p>Rating: ${place.rating}/5</p>` : ''}
+                            `
+                            });
+
+                            marker.addListener('click', () => {
+                                infoWindow.open(placesMap, marker);
+                            });
+
+                            // Add to list
+                            const placeItem = document.createElement('div');
+                            placeItem.className = 'place-item';
+                            placeItem.innerHTML = `
+                            <h4>${place.name}</h4>
+                            <p>Address: ${place.vicinity}</p>
+                            ${place.rating ? `<p>Rating: ${place.rating}/5</p>` : ''}
+                            <hr>
+                        `;
+                            placesList.appendChild(placeItem);
+                        });
+                    } else {
+                        console.error('Places request failed:', status);
+                        modalContent.innerHTML += `<div class="error">Could not load places: ${status}</div>`;
+                    }
+                });
+            }
+        });
     });
 
     async function calculateAndDisplayRoute(startAddress, travelMode) {

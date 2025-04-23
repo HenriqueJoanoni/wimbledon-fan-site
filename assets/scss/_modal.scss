@@ -127,4 +127,69 @@ modal-component {
       height: 400px;
     }
   }
+
+  /** PLACES TO GO SECTION */
+  .places-container {
+    padding: 20px;
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: $primary-color;
+    }
+
+    #placesMap {
+      height: 400px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      @media (max-width: $mobile) {
+        height: 300px;
+      }
+    }
+
+    .place-item {
+      margin: 1rem 0;
+      padding: 1.5rem;
+      background: lighten($secondary-color, 2%);
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateX(5px);
+        background: lighten($secondary-color, 5%);
+      }
+
+      h4 {
+        margin: 0 0 0.5rem;
+        color: $primary-color;
+        font-size: 1.1rem;
+      }
+
+      p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+        color: $text-secondary;
+      }
+
+      hr {
+        margin: 1rem -1.5rem;
+        border-color: rgba($text-secondary, 0.1);
+      }
+    }
+
+    &.loading {
+      position: relative;
+      min-height: 200px;
+
+      &:after {
+        content: "Loading places...";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: $text-secondary;
+      }
+    }
+  }
 }
