@@ -378,6 +378,16 @@ a {
   }
 }
 
+.jh_buttonDisabled {
+  background-color: $text-quaternary !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+
+  &:hover {
+    background-color: $text-quaternary !important;
+  }
+}
+
 /** FOOTER */
 footer {
   display: flex;

@@ -247,19 +247,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (modalType === 'transportation-info') {
             modalContent.innerHTML = `
-                <div class="route-planner">
-                    <h3>Plan Your Route to Wimbledon</h3>
-                    <form id="routeForm">
-                        <input type="text" 
-                               id="startAddress" 
-                               placeholder="Enter your starting address"
-                               required>
-                        <button type="submit" class="jh_button jh_buttonPrimary">Get Directions</button>
-                    </form>
-                    <div id="modalMap" style="height: 300px; width: 100%; margin-top: 20px;"></div>
-                    <div id="directionsPanel"></div>
-                </div>
-            `;
+                    <div class="route-planner">
+                        <h3>Plan Your Route to Wimbledon</h3>
+                        <form id="routeForm">
+                            <div id="waypointsContainer">
+                                <div class="waypoint-group">
+                                    <input type="text" 
+                                           class="waypoint-input" 
+                                           placeholder="Enter starting address"
+                                           required>
+                                    <button type="button" 
+                                            class="jh_button jh_buttonSecondary add-waypoint"
+                                            id="addWaypointBtn">+ Add Stop</button>
+                                </div>
+                            </div>
+                            <div class="travel-modes">
+                                <label><input type="radio" name="travelMode" value="DRIVING" checked> Driving</label>
+                                <label><input type="radio" name="travelMode" value="WALKING"> Walking</label>
+                                <label><input type="radio" name="travelMode" value="TRANSIT"> Transit</label>
+                            </div>
+                            <button type="submit" class="jh_button jh_buttonPrimary">Get Directions</button>
+                        </form>
+                        <div id="modalMap" style="height: 300px; width: 100%; margin-top: 20px;"></div>
+                        <div id="directionsPanel"></div>
+                    </div>`;
 
             modalMap = new google.maps.Map(document.getElementById('modalMap'), {
                 zoom: 12,
@@ -269,45 +280,109 @@ document.addEventListener('DOMContentLoaded', () => {
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer({
                 map: modalMap,
-                panel: document.getElementById('directionsPanel')
+                panel: document.getElementById('directionsPanel'),
+                suppressMarkers: false
+            });
+
+            const addWaypointBtn = document.getElementById('addWaypointBtn');
+
+            function updateAddButtonState() {
+                const waypointCount = document.querySelectorAll('.waypoint-group').length - 1;
+                addWaypointBtn.disabled = waypointCount >= 3;
+                if (waypointCount >= 3) {
+                    addWaypointBtn.textContent = 'Max 3 stops';
+                    addWaypointBtn.classList.add('jh_buttonDisabled');
+                } else {
+                    addWaypointBtn.textContent = '+ Add Stop';
+                    addWaypointBtn.classList.remove('jh_buttonDisabled');
+                }
+            }
+
+            addWaypointBtn.addEventListener('click', () => {
+                const waypointCount = document.querySelectorAll('.waypoint-group').length - 1;
+                if (waypointCount < 3) {
+                    addWaypointField();
+                    updateAddButtonState();
+                }
             });
 
             document.getElementById('routeForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const startAddress = document.getElementById('startAddress').value;
-
-                ['DRIVING', 'WALKING', 'TRANSIT'].forEach(mode => {
-                    calculateAndDisplayRoute(startAddress, mode);
-                });
+                calculateAndDisplayRoute();
             });
+
+            updateAddButtonState();
         }
     });
 
-    async function calculateAndDisplayRoute(startAddress, travelMode) {
+    function addWaypointField() {
+        const container = document.getElementById('waypointsContainer');
+        const waypointGroup = document.createElement('div');
+        waypointGroup.className = 'waypoint-group';
+        waypointGroup.innerHTML = `
+                <input type="text" 
+                       class="waypoint-input" 
+                       placeholder="Enter stop address">
+                <button type="button" class="jh_button jh_buttonDanger remove-waypoint">x</button>`;
+        container.appendChild(waypointGroup);
+
+        waypointGroup.querySelector('.remove-waypoint').addEventListener('click', function() {
+            container.removeChild(waypointGroup);
+            updateAddButtonState();
+        });
+    }
+
+    async function calculateAndDisplayRoute() {
         try {
-            const response = await directionsService.route({
+            const startAddress = document.querySelector('.waypoint-input').value;
+            const travelMode = document.querySelector('input[name="travelMode"]:checked').value;
+
+            const waypointInputs = Array.from(document.querySelectorAll('.waypoint-input')).slice(1);
+            const waypoints = waypointInputs
+                .filter(input => input.value.trim() !== '')
+                .map(input => ({
+                    location: input.value,
+                    stopover: true
+                }));
+
+            const request = {
                 origin: startAddress,
                 destination: wimbledonLocation,
+                waypoints: waypoints,
                 travelMode: travelMode,
-                provideRouteAlternatives: true
-            });
+                optimizeWaypoints: true,
+                provideRouteAlternatives: false
+            };
 
+            const response = await directionsService.route(request);
             directionsRenderer.setDirections(response);
 
-            const routeInfo = document.createElement('div');
-            routeInfo.className = 'route-option';
-            routeInfo.innerHTML = `
-                <h4>By ${travelMode.toLowerCase()}</h4>
-                <p>Distance: ${response.routes[0].legs[0].distance.text}</p>
-                <p>Duration: ${response.routes[0].legs[0].duration.text}</p>
-            `;
-            document.getElementById('directionsPanel').appendChild(routeInfo);
+            const directionsPanel = document.getElementById('directionsPanel');
+            directionsPanel.innerHTML = '';
+
+            const summary = document.createElement('div');
+            summary.className = 'route-summary';
+
+            const legs = response.routes[0].legs;
+            let totalDistance = 0;
+            let totalDuration = 0;
+
+            legs.forEach(leg => {
+                totalDistance += leg.distance.value;
+                totalDuration += leg.duration.value;
+            });
+
+            summary.innerHTML = `
+                    <h4>Route Summary (${travelMode.toLowerCase()})</h4>
+                    <p>Total Distance: ${(totalDistance / 1000).toFixed(1)} km</p>
+                    <p>Total Duration: ${Math.floor(totalDuration / 60)} minutes</p>
+                    <p>Number of stops: ${waypoints.length}</p>`;
+
+            directionsPanel.appendChild(summary);
 
         } catch (error) {
             console.error('Directions request failed:', error);
-            modalContent.innerHTML += `
-                <div class="error">Could not find route: ${error.message}</div>
-            `;
+            modalContent.innerHTML += `<div class="error">Could not find route: ${error.message}</div>`;
         }
     }
 });
@@ -329,4 +404,45 @@ document.querySelectorAll('.jh_faqQuestion').forEach(question => {
             answer.classList.add('jh_show');
         }
     });
+});
+
+/** PWA REGISTERING */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('ServiceWorker registration successful');
+            })
+            .catch(err => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    });
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    const installButton = document.createElement('button');
+    installButton.className = 'jh_button jh_buttonCta';
+    installButton.textContent = 'Install App';
+    installButton.style.position = 'fixed';
+    installButton.style.bottom = '20px';
+    installButton.style.right = '20px';
+    installButton.style.zIndex = '1000';
+
+    installButton.addEventListener('click', () => {
+        installButton.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted install');
+            }
+            deferredPrompt = null;
+        });
+    });
+
+    document.body.appendChild(installButton);
 });
