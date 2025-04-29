@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 /** COLORS */
 /** FEATURES */
@@ -428,6 +429,57 @@ modal-component .places-container.loading:after {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #777;
+}
+
+.jh_faqContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.jh_faqItem {
+  border: 1px solid rgb(192, 235, 166);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  transition: all 0.5s ease-in-out;
+}
+.jh_faqItem:hover {
+  border-color: rgb(52, 121, 40);
+}
+.jh_faqQuestion {
+  background-color: rgb(192, 235, 166);
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.jh_faqQuestion::after {
+  content: "▾";
+  font-size: 1.5rem;
+  color: rgb(52, 121, 40);
+  transition: transform 0.5s ease-in-out;
+}
+.jh_faqQuestion.jh_active {
+  background-color: rgb(52, 121, 40);
+  color: #fff;
+}
+.jh_faqQuestion.jh_active::after {
+  transform: rotate(180deg);
+  color: #fff;
+}
+.jh_faqAnswer {
+  padding: 0 1.5rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+.jh_faqAnswer p {
+  padding: 1.5rem 0;
+  color: #333;
+}
+.jh_faqAnswer.jh_show {
+  max-height: 500px;
 }
 
 /** BASE STRUCTURE */

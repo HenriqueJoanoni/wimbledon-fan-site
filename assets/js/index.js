@@ -1,31 +1,139 @@
-/** LOCATION API CALL */
-function initMap() {
-    const wimbledonLocations = {lat: 51.4340, lng: -0.2143};
+/** MAIN MAP WITH TOGGLEABLE POINTS OF INTEREST */
+let map;
+let placesService;
+let infoWindow;
+let currentMarkers = [];
+const courtMarkers = [];
+const wimbledonLocation = {lat: 51.4340, lng: -0.2143};
 
-    const map = new google.maps.Map(document.getElementById('jh_locations'), {
-        zoom: 16,
-        center: wimbledonLocations,
-        mapId: 'WIMBLEDON_STYLED_MAP'
+const courtLocations = [
+    {lat: 51.4340, lng: -0.2143},
+    {lat: 51.4332, lng: -0.2135},
+    {lat: 51.4338, lng: -0.2151},
+    {lat: 51.4345, lng: -0.2148},
+    {lat: 51.4335, lng: -0.2160}
+];
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('jh_locations'), {
+        zoom: 15,
+        center: wimbledonLocation,
+        mapId: 'WIMBLEDON_STYLED_MAP',
+        mapTypeControlOptions: {
+            mapTypeIds: ["roadmap", "hide_poi"]
+        }
     });
 
-    new google.maps.Marker({
-        position: wimbledonLocations,
-        map: map,
-        title: 'All Wimbledon Locations',
+    hideDefaultPOIs(map);
+
+    courtLocations.forEach((court, index) => {
+        const marker = new google.maps.Marker({
+            position: court,
+            map: map,
+            title: getCourtName(index),
+            icon: {
+                url: 'https://maps.google.com/mapfiles/ms/icons/tennis.png',
+                scaledSize: new google.maps.Size(32, 32)
+            }
+        });
+        courtMarkers.push(marker);
+    });
+
+    placesService = new google.maps.places.PlacesService(map);
+    infoWindow = new google.maps.InfoWindow();
+}
+
+function getCourtName(index) {
+    const courtNames = [
+        'Centre Court',
+        'No.1 Court',
+        'No.2 Court',
+        'No.3 Court',
+        'Court 12'
+    ];
+    return courtNames[index] || `Wimbledon Court ${index + 1}`;
+}
+
+function hideDefaultPOIs(map) {
+    const styleRules = [
+        {featureType: "poi", stylers: [{visibility: "off"}]},
+        {featureType: "transit", stylers: [{visibility: "off"}]}
+    ];
+
+    const styledMap = new google.maps.StyledMapType(styleRules, {name: "Hide POI Wimbledon"});
+    map.mapTypes.set('hide_poi', styledMap);
+    map.setMapTypeId('hide_poi');
+}
+
+function showPointsOfInterest(type) {
+    clearCurrentMarkers();
+    courtMarkers.forEach(marker => marker.setMap(null));
+
+    const request = {
+        location: wimbledonLocation,
+        radius: 1500,
+        type: type
+    };
+
+    placesService.nearbySearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            results.forEach(place => createPOIMarker(place, type));
+        }
     });
 }
 
+function createPOIMarker(place, type) {
+    const marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location,
+        title: place.name,
+        icon: {
+            url: getIconForCategory(type),
+            scaledSize: new google.maps.Size(32, 32)
+        }
+    });
+
+    currentMarkers.push(marker);
+
+    marker.addListener('click', () => {
+        infoWindow.setContent(`
+            <div class="poi-info">
+                <h3>${place.name}</h3>
+                <p>${place.vicinity}</p>
+                ${place.rating ? `<p>⭐ ${place.rating}/5</p>` : ''}
+                ${place.opening_hours?.open_now !== undefined ?
+            `<p>${place.opening_hours.open_now ? '🟢 Open' : '🔴 Closed'}</p>` : ''}
+            </div>
+        `);
+        infoWindow.open(map, marker);
+    });
+}
+
+function getIconForCategory(category) {
+    const icons = {
+        restaurant: 'https://maps.google.com/mapfiles/ms/icons/restaurant.png',
+        hotel: 'https://maps.google.com/mapfiles/ms/icons/lodging.png',
+        parking: 'https://maps.google.com/mapfiles/ms/icons/parkinglot.png',
+        cafe: 'https://maps.google.com/mapfiles/ms/icons/cafe.png',
+        museum: 'https://maps.google.com/mapfiles/ms/icons/museum.png'
+    };
+    return icons[category] || 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+}
+
+function clearCurrentMarkers() {
+    currentMarkers.forEach(marker => marker.setMap(null));
+    currentMarkers = [];
+
+    courtMarkers.forEach(marker => marker.setMap(map));
+
+    map.setCenter(wimbledonLocation);
+    map.setZoom(16);
+}
+
 window.gm_authFailure = () => {
-    console.error('Google Maps failed to load');
     document.getElementById('jh_locations').innerHTML =
         '<p>Map unavailable - Please check your internet connection</p>';
 };
-
-const mapsScript = document.createElement('script');
-mapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${window.API_KEYS.maps}&callback=initMap`;
-mapsScript.async = true;
-mapsScript.defer = true;
-document.head.appendChild(mapsScript);
 
 /** HAMBURGER MENU */
 document.addEventListener('DOMContentLoaded', () => {
@@ -173,74 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         }
-
-        document.addEventListener('modalOpened', async (e) => {
-            const modalType = e.detail?.modalType;
-
-            if (modalType === 'places-to-go') {
-                modalContent.innerHTML = `
-                <div class="places-container">
-                    <h3>Interesting Places Around Wimbledon</h3>
-                    <div id="placesMap" style="height: 400px; width: 100%;"></div>
-                    <div id="placesList" style="margin-top: 20px;"></div>
-                </div>
-            `;
-
-                const placesMap = new google.maps.Map(document.getElementById('placesMap'), {
-                    center: wimbledonLocation,
-                    zoom: 14
-                });
-
-                const placesService = new google.maps.places.PlacesService(placesMap);
-                const placesList = document.getElementById('placesList');
-
-                const request = {
-                    location: wimbledonLocation,
-                    radius: 2000, // 2km radius
-                    types: ['restaurant', 'park', 'shopping_mall', 'cafe', 'museum']
-                };
-
-                placesService.nearbySearch(request, (results, status, pagination) => {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        results.forEach(place => {
-                            // Add marker
-                            const marker = new google.maps.Marker({
-                                position: place.geometry.location,
-                                map: placesMap,
-                                title: place.name
-                            });
-
-                            // Add info window
-                            const infoWindow = new google.maps.InfoWindow({
-                                content: `
-                                <h5>${place.name}</h5>
-                                <p>${place.vicinity}</p>
-                                ${place.rating ? `<p>Rating: ${place.rating}/5</p>` : ''}
-                            `
-                            });
-
-                            marker.addListener('click', () => {
-                                infoWindow.open(placesMap, marker);
-                            });
-
-                            // Add to list
-                            const placeItem = document.createElement('div');
-                            placeItem.className = 'place-item';
-                            placeItem.innerHTML = `
-                            <h4>${place.name}</h4>
-                            <p>Address: ${place.vicinity}</p>
-                            ${place.rating ? `<p>Rating: ${place.rating}/5</p>` : ''}
-                            <hr>
-                        `;
-                            placesList.appendChild(placeItem);
-                        });
-                    } else {
-                        console.error('Places request failed:', status);
-                        modalContent.innerHTML += `<div class="error">Could not load places: ${status}</div>`;
-                    }
-                });
-            }
-        });
     });
 
     async function calculateAndDisplayRoute(startAddress, travelMode) {
@@ -270,4 +310,23 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
     }
+});
+
+/** FAQ CONTROLLER */
+document.querySelectorAll('.jh_faqQuestion').forEach(question => {
+    question.addEventListener('click', () => {
+        const faqItem = question.closest('.jh_faqItem');
+        const answer = faqItem.querySelector('.jh_faqAnswer');
+        const isActive = faqItem.classList.contains('jh_active');
+
+        document.querySelectorAll('.jh_faqItem').forEach(item => {
+            item.classList.remove('jh_active');
+            item.querySelector('.jh_faqAnswer').classList.remove('jh_show');
+        });
+
+        if (!isActive) {
+            faqItem.classList.add('jh_active');
+            answer.classList.add('jh_show');
+        }
+    });
 });

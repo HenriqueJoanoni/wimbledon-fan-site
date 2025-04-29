@@ -3,29 +3,41 @@
 <nav-bar></nav-bar>
 <div class="jh_mainContainer">
     <div class="jh_textCenter">
-        <h1>All Court Locations</h1>
-        <div id="jh_locations"></div>
+        <h1 class="jh_translatedString">All Court Locations</h1>
+        <div class="map-controls">
+            <button class="jh_button jh_buttonSecondary jh_translatedString"
+                    onclick="showPointsOfInterest('restaurant')"
+                    data-translate-key="restaurants">
+                Restaurants
+            </button>
+            <button class="jh_button jh_buttonSecondary jh_translatedString"
+                    onclick="showPointsOfInterest('hotel')"
+                    data-translate-key="hotels">
+                Hotels
+            </button>
+            <button class="jh_button jh_buttonSecondary jh_translatedString"
+                    onclick="showPointsOfInterest('parking')"
+                    data-translate-key="parking">
+                Parking
+            </button>
+            <button class="jh_button jh_buttonSecondary jh_translatedString"
+                    onclick="showPointsOfInterest('cafe')"
+                    data-translate-key="cafes">
+                Cafes
+            </button>
+            <button class="jh_button jh_buttonSecondary"
+                    onclick="clearCurrentMarkers()">
+                Clear Points
+            </button>
+        </div>
+        <div id="jh_locations" style="height: 500px; width: 100%;"></div>
     </div>
     <section class="jh_displayActivities">
-        <activity-card
-                data-modal-content="places-to-go"
-                title="All places to go around wimbledon"
-                description="Check all places to go around wimbledon"
-                img-src="assets/img/pexels-mikebirdy-9787553.jpg">
-        </activity-card>
-
         <activity-card
                 data-modal-content="transportation-info"
                 title="Check the transportation of your court"
                 description="All transportation available to the event"
                 img-src="assets/img/pexels-nubikini-385997.jpg">
-        </activity-card>
-
-        <activity-card
-                data-modal-content="around-events"
-                title="Other Events Happening"
-                description="Check Other Events Happening"
-                img-src="assets/img/pexels-joshsorenson-976866.jpg">
         </activity-card>
     </section>
     <a class="jh_button jh_buttonPrimary jh_translatedString" href="index.html">Back</a>
@@ -34,7 +46,7 @@
 
 </div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=${API_KEYS.maps}&libraries=places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeoJK5rSoc9-IhsBVH7uKrdbWtTCw7nFs&libraries=places&callback=initMap">
 </script>
 <script src="assets/config/environment.js"></script>
 <script src="assets/js/index.js"></script>
