@@ -15,7 +15,7 @@ class HeaderComponent extends HTMLElement {
             <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
             
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Wimbledon API</title>
+            <title data-translate>Wimbledon Tourism Guide</title>
             <link rel="stylesheet" href="assets/css/main.css">
             <link rel="shortcut icon" href="assets/img/tennis.png" type="image/x-icon">
         </head>`;
@@ -34,19 +34,19 @@ class NavBarComponent extends HTMLElement {
                     </a>
                 </div>
                 <div class="jh_navLinks">
-                    <a href="index.html" class="jh_translatedString">Home</a>
-                    <a href="wimbledon-locations.html" class="jh_translatedString">What to do?</a>
-                    <a href="contact-page.html" class="jh_translatedString">Contact</a>
+                    <a href="index.html" class="jh_translatedString" data-translate>Home</a>
+                    <a href="wimbledon-locations.html" class="jh_translatedString" data-translate>What to do?</a>
+                    <a href="contact-page.html" class="jh_translatedString" data-translate>Contact</a>
                     <a target="_blank" href="https://www.wimbledon.com/en_GB/atoz/ticket_prices.html"
-                       class="jh_button jh_buttonCta jh_translatedString">Tickets</a>
-                    <a class="jh_translationButton" data-lang="pt-BR">
-                        <img src="assets/img/brazil-.png" alt="Translate pt-br">
+                       class="jh_button jh_buttonCta jh_translatedString" data-translate>Tickets</a>
+                    <a class="jh_translationButton" data-lang="pt">
+                        <img src="assets/img/brazil-.png" alt="Portuguese" data-translate-alt="Portuguese language">
                     </a>
                     <a class="jh_translationButton" data-lang="es">
-                        <img src="assets/img/spain.png" alt="Translate es">
+                        <img src="assets/img/spain.png" alt="Spanish" data-translate-alt="Spanish language">
                     </a>
-                    <a class="jh_translationButton" data-lang="en-GB">
-                        <img src="assets/img/united-kingdom.png" alt="Translate en-gb">
+                    <a class="jh_translationButton" data-lang="en">
+                        <img src="assets/img/united-kingdom.png" alt="English" data-translate-alt="English language">
                     </a>
                 </div>
                 <button class="jh_hamburger">
@@ -61,28 +61,28 @@ class NavBarComponent extends HTMLElement {
 
 class CardComponent extends HTMLElement {
     static get observedAttributes() {
-        return ['title', 'description', 'img-src'];
+        return ['title', 'description', 'img-src', 'data-translate-title', 'data-translate-description'];
     }
 
     connectedCallback() {
         this.render();
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(name, oldValue, newValue) {
         this.render();
     }
 
     render() {
-        const title = this.getAttribute('title') || 'Events and activities';
-        const description = this.getAttribute('description') || 'Check activities around Wimbledon';
+        const translatedTitle = this.getAttribute('data-translate-title') || this.getAttribute('title') || 'Events and activities';
+        const translatedDesc = this.getAttribute('data-translate-description') || this.getAttribute('description') || 'Check activities around Wimbledon';
         const imgSrc = this.getAttribute('img-src') || 'assets/img/gettyimages-1502975896-2048x2048.jpg';
 
         this.innerHTML = `
             <div class="jh_card">
-                <img src="${imgSrc}" alt="${title}" style="width:100%">
+                <img src="${imgSrc}" alt="${translatedTitle}" data-translate-alt="${translatedTitle}">
                 <div class="jh_cardContainer">
-                    <h4><b>${title}</b></h4>
-                    <p>${description}</p>
+                    <h4 data-translate><b>${translatedTitle}</b></h4>
+                    <p data-translate>${translatedDesc}</p>
                 </div>
             </div>
         `;
@@ -92,7 +92,7 @@ class CardComponent extends HTMLElement {
 class FooterComponent extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `<footer>
-                            <span class="jh_footerCopyright">Jose Henrique Pinto Joanoni @ 2025</span>
+                            <span class="jh_footerCopyright" data-translate>Jose Henrique Pinto Joanoni @ 2025</span>
                         </footer>`;
     }
 }

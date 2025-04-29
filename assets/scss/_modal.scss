@@ -29,12 +29,23 @@ modal-component {
     @media (min-width: $tablet) {
       padding: 2.5rem;
     }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: $border-radius;
+      margin: 1rem 0;
+    }
   }
 
   .modal-content {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    img {
+      max-height: 400px;
+      object-fit: cover;
+    }
   }
 
   .hidden {
@@ -143,11 +154,11 @@ modal-component {
     }
 
     #modalMap {
-      height: 300px;
+      height: 400px;
       width: 100%;
       border-radius: $border-radius;
       border: 1px solid $secondary-color;
-      margin-top: 1rem;
+      margin: 1rem 0;
 
       @media (min-width: $tablet) {
         height: 350px;

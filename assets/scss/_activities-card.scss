@@ -14,24 +14,47 @@
   }
 }
 
+/** ACTIVITIES CARD */
 .jh_card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
-  transition: 0.3s;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
+  background: white;
+  border-radius: $border-radius;
+  @include jh_boxShadow($rgba1, $rgba2);
   overflow: hidden;
+  margin: 1rem;
+  transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+  }
+
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: $border-radius $border-radius 0 0;
   }
 
   .jh_cardContainer {
-    padding: 2rem;
-    text-align: center;
+    padding: 1.5rem;
+
+    h4 {
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: $mobile) {
+    margin: 0.5rem;
+
+    img {
+      height: 150px;
+    }
   }
 }
 

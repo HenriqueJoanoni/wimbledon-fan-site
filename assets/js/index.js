@@ -216,25 +216,153 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /** TRANSLATIONS */
-document.querySelectorAll('.jh_translationButton').forEach(button => {
-    button.addEventListener('click', async function () {
-        const targetLang = this.dataset.lang;
-        const elements = document.querySelectorAll('h1, p, span, .jh_translatedString');
-
-        for (const element of elements) {
-            const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    q: element.innerText,
-                    target: targetLang
-                }),
-            });
-            const translatedData = await response.json();
-            element.innerText = translatedData.data.translations[0].translatedText;
+function initTranslations() {
+    const observer = new MutationObserver((mutations) => {
+        const buttons = document.querySelectorAll('.jh_translationButton');
+        if (buttons.length > 0) {
+            observer.disconnect();
+            console.log('Translation buttons found:', buttons.length);
+            setupTranslationListeners(buttons);
         }
     });
-});
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
+
+function setupTranslationListeners(buttons) {
+    buttons.forEach(button => {
+        // console.log('Adding listener to:', button);
+
+        button.addEventListener('click', async function () {
+            console.log('Translation button clicked!');
+            let originalHTML = this.innerHTML;
+            // console.log('API Key:', window.API_KEYS?.translation);
+
+            try {
+                const targetLang = this.dataset.lang;
+                const elements = document.querySelectorAll('[data-translate]');
+
+                if (!window.API_KEYS?.translation) {
+                    throw new Error('API key not configured');
+                }
+
+                this.innerHTML = `<span class="loading">Translating...</span>`;
+
+                const translations = await Promise.all(
+                    Array.from(elements).map(async element => {
+                        try {
+                            const isCardComponent = element.hasAttribute('data-translate-title');
+                            const text = element.textContent.trim();
+
+                            if (!isCardComponent && text) {
+                                const response = await fetch(
+                                    `https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`,
+                                    {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            q: text,
+                                            target: targetLang,
+                                            format: 'text'
+                                        }),
+                                    }
+                                );
+
+                                if (!response.ok) {
+                                    const error = await response.json();
+                                    throw new Error(error.error.message);
+                                }
+
+                                const data = await response.json();
+                                return {
+                                    element,
+                                    translation: data.data.translations[0].translatedText
+                                };
+                            }
+
+                            else if (isCardComponent) {
+                                const titleText = element.getAttribute('data-translate-title') || '';
+                                const descText = element.getAttribute('data-translate-description') || '';
+
+                                const titleResponse = await fetch(
+                                    `https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`,
+                                    {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            q: titleText,
+                                            target: targetLang,
+                                            format: 'text'
+                                        }),
+                                    }
+                                );
+
+                                const descResponse = await fetch(
+                                    `https://translation.googleapis.com/language/translate/v2?key=${window.API_KEYS.translation}`,
+                                    {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            q: descText,
+                                            target: targetLang,
+                                            format: 'text'
+                                        }),
+                                    }
+                                );
+
+                                if (!titleResponse.ok || !descResponse.ok) {
+                                    const error = await titleResponse.json().catch(() => descResponse.json());
+                                    throw new Error(error.error.message);
+                                }
+
+                                const titleData = await titleResponse.json();
+                                const descData = await descResponse.json();
+
+                                return {
+                                    element,
+                                    translation: {
+                                        title: titleData.data.translations[0].translatedText,
+                                        description: descData.data.translations[0].translatedText
+                                    }
+                                };
+                            }
+
+                            return { element, translation: null };
+
+                        } catch (error) {
+                            console.error('Translation error for element:', element, error);
+                            return { element, translation: null };
+                        }
+                    })
+                );
+
+                translations.forEach(({ element, translation }) => {
+                    if (element && translation) {
+                        if (typeof translation === 'string') {
+                            element.textContent = translation;
+                            element.setAttribute('data-translated', 'true');
+                        } else if (typeof translation === 'object') {
+                            element.setAttribute('data-translate-title', translation.title);
+                            element.setAttribute('data-translate-description', translation.description);
+                            element.setAttribute('data-translated', 'true');
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Translation error:', error);
+                alert(`Translation failed: ${error.message}`);
+            } finally {
+                this.innerHTML = originalHTML;
+            }
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initTranslations);
 
 /** AMUSEMENT MODALS */
 document.addEventListener('DOMContentLoaded', () => {
@@ -409,7 +537,7 @@ document.querySelectorAll('.jh_faqQuestion').forEach(question => {
 /** PWA REGISTERING */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('sw.js')
             .then(registration => {
                 console.log('ServiceWorker registration successful');
             })

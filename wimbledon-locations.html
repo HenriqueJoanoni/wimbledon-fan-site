@@ -3,30 +3,31 @@
 <nav-bar></nav-bar>
 <div class="jh_mainContainer">
     <div class="jh_textCenter">
-        <h1 class="jh_translatedString">All Court Locations</h1>
+        <h1 data-translate>All Court Locations</h1>
         <div class="map-controls">
-            <button class="jh_button jh_buttonSecondary jh_translatedString"
+            <button class="jh_button jh_buttonSecondary"
                     onclick="showPointsOfInterest('restaurant')"
-                    data-translate-key="restaurants">
+                    data-translate>
                 Restaurants
             </button>
-            <button class="jh_button jh_buttonSecondary jh_translatedString"
+            <button class="jh_button jh_buttonSecondary"
                     onclick="showPointsOfInterest('hotel')"
-                    data-translate-key="hotels">
+                    data-translate>
                 Hotels
             </button>
-            <button class="jh_button jh_buttonSecondary jh_translatedString"
+            <button class="jh_button jh_buttonSecondary"
                     onclick="showPointsOfInterest('parking')"
-                    data-translate-key="parking">
+                    data-translate>
                 Parking
             </button>
-            <button class="jh_button jh_buttonSecondary jh_translatedString"
+            <button class="jh_button jh_buttonSecondary"
                     onclick="showPointsOfInterest('cafe')"
-                    data-translate-key="cafes">
+                    data-translate>
                 Cafes
             </button>
             <button class="jh_button jh_buttonSecondary"
-                    onclick="clearCurrentMarkers()">
+                    onclick="clearCurrentMarkers()"
+                    data-translate>
                 Clear Points
             </button>
         </div>
@@ -34,19 +35,18 @@
     </div>
     <section class="jh_displayActivities">
         <activity-card
-                data-modal-content="transportation-info"
-                title="Check the transportation of your court"
-                description="All transportation available to the event"
-                img-src="assets/img/pexels-nubikini-385997.jpg">
+            data-modal-content="transportation-info"
+            data-translate-title="Check the transportation of your court"
+            data-translate-description="All transportation available to the event"
+            img-src="assets/img/pexels-nubikini-385997.jpg">
         </activity-card>
     </section>
-    <a class="jh_button jh_buttonPrimary jh_translatedString" href="index.html">Back</a>
+    <a class="jh_button jh_buttonPrimary" href="index.html" data-translate>Back</a>
 
     <modal-component></modal-component>
-
 </div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeoJK5rSoc9-IhsBVH7uKrdbWtTCw7nFs&libraries=places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=${window.API_KEYS.maps}&libraries=places&callback=initMap">
 </script>
 <script src="assets/config/environment.js"></script>
 <script src="assets/js/index.js"></script>
