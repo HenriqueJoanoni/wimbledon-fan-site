@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 /** COLORS */
 /** FEATURES */
@@ -218,23 +219,43 @@
   margin: 1rem;
 }
 
+/** ACTIVITIES CARD */
 .jh_card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
-  transition: 0.3s;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  margin: 1rem;
+  transition: transform 0.3s ease;
 }
 .jh_card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+}
+.jh_card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
 }
 .jh_card .jh_cardContainer {
-  padding: 2rem;
-  text-align: center;
+  padding: 1.5rem;
+}
+.jh_card .jh_cardContainer h4 {
+  color: rgb(52, 121, 40);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+.jh_card .jh_cardContainer p {
+  color: #777;
+  font-size: 0.95rem;
+}
+@media (max-width: 480px) {
+  .jh_card {
+    margin: 0.5rem;
+  }
+  .jh_card img {
+    height: 150px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -257,11 +278,8 @@
     justify-content: space-evenly;
   }
 }
-/**
- * Base code from: https://www.freecodecamp.org/news/how-to-build-a-modal-with-javascript/
- */
 modal-component {
-  /** DISPLAY ROUTES */
+  /** Route Planner Styles */
 }
 modal-component .overlay {
   position: fixed;
@@ -271,28 +289,52 @@ modal-component .overlay {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 modal-component .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   width: 95%;
-  max-width: 800px;
+  max-width: 900px;
+  height: auto;
   max-height: 90vh;
   overflow-y: auto;
-  min-height: 400px;
   background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
+  padding: 2rem;
+  border-radius: 10px;
   z-index: 1001;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.3);
 }
-modal-component .modal .btn-close {
+@media (min-width: 768px) {
+  modal-component .modal {
+    padding: 2.5rem;
+  }
+}
+modal-component .modal img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 1rem 0;
+}
+modal-component .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+modal-component .modal-content img {
+  max-height: 400px;
+  object-fit: cover;
+}
+modal-component .hidden {
+  display: none !important;
+}
+modal-component .btn-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: #eee;
+  background: transparent;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
@@ -305,73 +347,168 @@ modal-component .modal .btn-close {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  box-sizing: border-box;
+  color: #777;
 }
-modal-component .modal .btn-close:hover {
+modal-component .btn-close:hover {
+  color: rgb(52, 121, 40);
   transform: scale(1.1);
-  background: #ddd;
 }
-modal-component .modal-content {
+modal-component .route-planner {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-modal-component .hidden {
-  display: none !important;
-}
-modal-component .route-planner {
-  flex: 1;
-  padding: 20px;
-  min-height: 300px;
-}
 modal-component .route-planner h3 {
   font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  color: rgb(52, 121, 40);
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
-modal-component #routeForm {
-  margin: 20px 0;
+modal-component .route-planner #routeForm {
   display: flex;
-  gap: 10px;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 1rem;
 }
-@media (max-width: 480px) {
-  modal-component #routeForm {
-    flex-direction: column;
-  }
-  modal-component #routeForm input, modal-component #routeForm button {
-    width: 100%;
-    margin: 5px 0;
-  }
+modal-component .route-planner .waypoints-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-@media (max-width: 480px) {
-  modal-component #routeForm input {
-    padding: 1rem;
-  }
+modal-component .route-planner .waypoint-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
-modal-component #routeForm input {
+modal-component .route-planner .waypoint-group input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgb(192, 235, 166);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: border-color 0.5s ease-in-out;
 }
-modal-component .route-option {
-  margin: 10px 0;
-  padding: 10px;
-  background: #f5f5f5;
-  border-radius: 4px;
+modal-component .route-planner .waypoint-group input:focus {
+  border-color: rgb(52, 121, 40);
+  outline: none;
 }
-modal-component #directionsPanel {
-  margin-top: 20px;
-  max-height: 50vh;
+modal-component .route-planner .waypoint-group .remove-waypoint {
+  padding: 0.5rem;
+  min-width: 2.5rem;
+}
+modal-component .route-planner .add-waypoint {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+modal-component .route-planner .travel-modes {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+modal-component .route-planner .travel-modes label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+}
+modal-component .route-planner .travel-modes label input {
+  accent-color: rgb(52, 121, 40);
+}
+modal-component .route-planner #modalMap {
+  height: 400px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgb(192, 235, 166);
+  margin: 1rem 0;
+}
+@media (min-width: 768px) {
+  modal-component .route-planner #modalMap {
+    height: 350px;
+  }
+}
+modal-component .route-planner #directionsPanel {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgb(221.4770642202, 244.3577981651, 207.6422018349);
+  border-radius: 10px;
+  max-height: 300px;
   overflow-y: auto;
 }
-modal-component #modalMap {
-  height: 300px;
+modal-component .route-planner .route-summary {
+  background: rgb(255, 251, 230);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 }
-@media (max-width: 768px) {
-  modal-component #modalMap {
-    height: 400px;
-  }
+modal-component .route-planner .route-summary h4 {
+  color: rgb(52, 121, 40);
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+modal-component .route-planner .route-summary p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+modal-component .route-planner .error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 0.75rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.jh_faqContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.jh_faqItem {
+  border: 1px solid rgb(192, 235, 166);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  transition: all 0.5s ease-in-out;
+}
+.jh_faqItem:hover {
+  border-color: rgb(52, 121, 40);
+}
+.jh_faqQuestion {
+  background-color: rgb(192, 235, 166);
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.jh_faqQuestion::after {
+  content: "▾";
+  font-size: 1.5rem;
+  color: rgb(52, 121, 40);
+  transition: transform 0.5s ease-in-out;
+}
+.jh_faqQuestion.jh_active {
+  background-color: rgb(52, 121, 40);
+  color: #fff;
+}
+.jh_faqQuestion.jh_active::after {
+  transform: rotate(180deg);
+  color: #fff;
+}
+.jh_faqAnswer {
+  padding: 0 1.5rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+.jh_faqAnswer p {
+  padding: 1.5rem 0;
+  color: #333;
+}
+.jh_faqAnswer.jh_show {
+  max-height: 500px;
 }
 
 /** BASE STRUCTURE */
@@ -663,6 +800,70 @@ a:hover {
 .jh_translationButton img {
   width: 32px;
   height: 32px;
+}
+
+.jh_buttonDisabled {
+  background-color: #999 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+.jh_buttonDisabled:hover {
+  background-color: #999 !important;
+}
+
+/** LOADING TRANSLATIONS */
+.loading {
+  position: relative;
+  padding-right: 24px;
+}
+.loading::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgb(52, 121, 40);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.error-message {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #ff4444;
+  color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  z-index: 10000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+activity-card {
+  display: block;
+  margin: 1rem 0;
+  transition: opacity 0.3s ease;
+}
+activity-card[data-translated] {
+  opacity: 1 !important;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.jh_heroBanner img {
+  object-position: center 30%;
 }
 
 /** FOOTER */

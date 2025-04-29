@@ -1,0 +1,61 @@
+.jh_faq {
+  &Container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  &Item {
+    border: 1px solid $secondary-color;
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+    @include jh_transitionEffect(all);
+
+    &:hover {
+      border-color: $primary-color;
+    }
+  }
+
+  &Question {
+    background-color: $secondary-color;
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    &::after {
+      content: '▾';
+      font-size: 1.5rem;
+      color: $primary-color;
+      @include jh_transitionEffect(transform);
+    }
+
+    &.jh_active {
+      background-color: $primary-color;
+      color: $text-quinary;
+
+      &::after {
+        transform: rotate(180deg);
+        color: $text-quinary;
+      }
+    }
+  }
+
+  &Answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    @include jh_transitionEffect(max-height);
+
+    p {
+      padding: 1.5rem 0;
+      color: $text-tertiary;
+    }
+
+    &.jh_show {
+      max-height: 500px;
+    }
+  }
+}

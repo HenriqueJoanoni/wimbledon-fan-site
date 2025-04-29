@@ -8,6 +8,12 @@ $rgba1: rgba(0, 0, 0, 0.12);
 $rgba2: rgba(0, 0, 0, 0.1);
 $rgba3: rgba(0, 0, 0, 0.3);
 
+$text-primary: #000;
+$text-secondary: #777;
+$text-tertiary: #333;
+$text-quaternary: #999;
+$text-quinary: #fff;
+
 /** FEATURES */
 $border-radius: 10px;
 $transition-time: 0.3s;
@@ -42,6 +48,7 @@ $desktop: 1024px;
 @import "contact-page";
 @import "activities-card";
 @import "modal";
+@import "faq";
 
 /** BASE STRUCTURE */
 * {
@@ -369,6 +376,72 @@ a {
     width: 32px;
     height: 32px;
   }
+}
+
+.jh_buttonDisabled {
+  background-color: $text-quaternary !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+
+  &:hover {
+    background-color: $text-quaternary !important;
+  }
+}
+
+/** LOADING TRANSLATIONS */
+.loading {
+  position: relative;
+  padding-right: 24px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    border: 2px solid $primary-color;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #ff4444;
+  color: white;
+  padding: 1rem;
+  border-radius: $border-radius;
+  z-index: 10000;
+  @include jh_boxShadow(rgba(0,0,0,0.2), rgba(0,0,0,0.1));
+}
+
+activity-card {
+  display: block;
+  margin: 1rem 0;
+  transition: opacity 0.3s ease;
+
+  &[data-translated] {
+    opacity: 1 !important;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.jh_heroBanner img {
+  object-position: center 30%;
 }
 
 /** FOOTER */
