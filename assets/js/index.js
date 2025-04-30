@@ -539,10 +539,10 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
             .then(registration => {
-                console.log('ServiceWorker registration successful');
+                console.log('SW registered: ', registration);
             })
-            .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
             });
     });
 }
@@ -554,15 +554,9 @@ window.addEventListener('beforeinstallprompt', (e) => {
     deferredPrompt = e;
 
     const installButton = document.createElement('button');
-    installButton.className = 'jh_button jh_buttonCta';
+    installButton.className = 'pwa-install-btn';
     installButton.textContent = 'Install App';
-    installButton.style.position = 'fixed';
-    installButton.style.bottom = '20px';
-    installButton.style.right = '20px';
-    installButton.style.zIndex = '1000';
-
-    installButton.addEventListener('click', () => {
-        installButton.style.display = 'none';
+    installButton.onclick = () => {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(choiceResult => {
             if (choiceResult.outcome === 'accepted') {
@@ -570,7 +564,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
             }
             deferredPrompt = null;
         });
-    });
+    };
 
     document.body.appendChild(installButton);
 });
